@@ -117,6 +117,7 @@ age_map = {
 
 # 3. Prediction Endpoint with SHAP Reasoning
 @app.post("/predict")
+@app.post("/api/predict")
 def predict_risk(patient: PatientData):
     if model is None:
         raise HTTPException(status_code=500, detail="Model artifacts not loaded.")
@@ -214,6 +215,7 @@ def predict_risk(patient: PatientData):
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.get("/health")
+@app.get("/api/health")
 def health():
     return {
         "status": "ok",
@@ -221,3 +223,22 @@ def health():
         "shap_available": shap_explainer is not None,
         "optimal_threshold": optimal_threshold,
     }
+
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
+import os
+
+# Resolve the frontend directory dynamically to support both local development and Docker
+frontend_dir = BASE_DIR.parent / "frontend" / "dist"
+if not frontend_dir.exists():
+    frontend_dir = BASE_DIR / "frontend" / "dist"
+if not frontend_dir.exists():
+    frontend_dir = Path("frontend/dist")
+
+# Mount the React build folder to serve static files (HTML, CSS, JS)
+app.mount("/assets", StaticFiles(directory=str(frontend_dir / "assets")), name="assets")
+
+# Serve the main React index.html on the root URL
+@app.get("/{catchall:path}")
+def serve_react_app(catchall: str):
+    return FileResponse(str(frontend_dir / "index.html"))
