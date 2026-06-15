@@ -1,0 +1,122 @@
+================================================================================
+HOSPITAL READMISSION RISK ENGINE - PROJECT SUMMARY
+================================================================================
+
+--------------------------------------------------------------------------------
+1. PROJECT OVERVIEW: WHAT IT DOES & WHY IT IS NEEDED
+--------------------------------------------------------------------------------
+* What it does:
+  This application is an end-to-end clinical decision support tool. It predicts
+  the probability that a diabetic patient will be readmitted to the hospital within 
+  30 days of discharge. It provides both a quantitative risk percentage and an 
+  explainable AI (SHAP) panel that highlights the key clinical drivers behind 
+  each patient's risk profile.
+
+* Why it is needed:
+  Hospital readmissions are a critical quality metric in healthcare. Unplanned 
+  readmissions cost billions of dollars annually and often indicate premature 
+  discharges or gaps in post-discharge care. By identifying high-risk patients 
+  before they leave, medical staff can coordinate specialized discharge planning, 
+  home-care visits, and medication adjustments, thereby improving patient outcomes 
+  and saving hospital resources.
+
+--------------------------------------------------------------------------------
+2. TECHNICAL STACK & LIBRARIES USED
+--------------------------------------------------------------------------------
+* Programming Languages:
+  - Python: Used for the machine learning training pipeline, SHAP calculations, 
+    and backend API server.
+  - JavaScript (ES6+): Used for building the interactive web dashboard.
+  - HTML5 & CSS3: Used for application structure, styles, and smooth animations.
+
+* Key Python Libraries (Backend):
+  - fastapi: Web framework used to build the API endpoints (/predict and /health).
+  - uvicorn: ASGI server to run the FastAPI application.
+  - pydantic: Enforces data validation and request/response schema modeling.
+  - pandas: Data manipulation library used for data cleaning and feature engineering.
+  - numpy: Performs array operations and numerical math.
+  - scikit-learn: Provides data splitting utility and classification metrics.
+  - xgboost: Fast, state-of-the-art gradient-boosted decision tree algorithm.
+  - shap: Calculates game-theoretic Shapley values to explain model predictions.
+  - optuna: Bayesian optimization framework used to find optimal hyperparameters.
+  - joblib: Handles serialization (saving and loading) of trained models.
+
+* Key JavaScript Libraries (Frontend):
+  - React: Components-based UI library for rendering the patient portal.
+  - Tailwind CSS: Utility-first framework for glassmorphic dark-mode styling.
+  - Vite: Build tool that serves and bundles the frontend assets.
+
+--------------------------------------------------------------------------------
+3. SKILLS DEMONSTRATED IN THE PROJECT
+--------------------------------------------------------------------------------
+* Machine Learning & Feature Engineering:
+  - ICD-9 Code Mapping: Grouping raw diagnostic medical codes into clinical 
+    categories (e.g. Circulatory, Respiratory, Diabetes).
+  - Imbalance Management: Utilizing 'scale_pos_weight' instead of SMOTE to ensure 
+    risk probability scores are well-calibrated to the real-world base rate.
+  - Threshold Optimization: Tuning decision boundaries using Precision-Recall 
+    curves to maximize the F1-Score (balance precision and recall).
+  - Hyperparameter Search: Programmatically searching the parameters space with 
+    Bayesian optimization (Optuna).
+  - Explainable AI (XAI): Implementing game-theoretic attributions using SHAP.
+
+* Software Engineering & Integration:
+  - RESTful API Design: Structuring endpoints for data entry, predictive scoring, 
+    and model diagnostic states.
+  - Frontend-Backend Proxying: Managing CORS and proxy redirection from Vite (5173) 
+    to Uvicorn (8000).
+  - Clean UI Design: Implementing smooth transitions, progress bars, layout 
+    responsiveness, and dynamic markdown text rendering in React.
+
+--------------------------------------------------------------------------------
+4. ROLE OF EACH FILE
+--------------------------------------------------------------------------------
+* Root Level:
+  - summary.txt: This project summary sheet.
+  - update_notebooks.py: Script to batch-update Jupyter notebooks.
+
+* Dataset (/dataset):
+  - diabetic_cleaned.csv: The source database containing ~70k patient records.
+
+* Notebooks (/notebook):
+  - EDA.ipynb: Exploratory Data Analysis exploring dataset distributions.
+  - training.ipynb: Preliminary training notebook testing basic ML baselines.
+
+* Backend (/backend):
+  - requirements.txt: Python library dependencies list.
+  - retrain_model.py: standalone retraining pipeline that encodes data, runs 
+    Optuna searches, calculates optimal threshold, and saves serialized pickles.
+  - main.py: API server containing endpoints. Computes predictions and 
+    generates the SHAP-attributions and clinical text summary.
+  - hospital_readmission_xgb_model_v2.pkl: Serialized trained XGBoost model.
+  - trained_feature_columns_v2.pkl: List of feature columns to keep shapes aligned.
+  - optimal_threshold.pkl: Serialized probability boundary threshold.
+
+* Frontend (/frontend):
+  - package.json: Node.js dependencies configuration.
+  - vite.config.js: Vite development proxy setup.
+  - index.html: HTML page wrapper.
+  - src/main.jsx: React main rendering mount point.
+  - src/App.jsx: React top routing parent.
+  - src/HospitalDashboard.jsx: Front-end dashboard UI component. Includes data form, 
+    risk rating widgets, SHAP attribution graphs, and clinical summaries.
+  - src/index.css & App.css: Custom animations, fonts, and tailwind configurations.
+
+--------------------------------------------------------------------------------
+5. STEP-BY-STEP WORKFLOW OF THE APPLICATION
+--------------------------------------------------------------------------------
+1. Patient Intake: Medical staff enters demographic and clinical features (stay 
+   duration, medications, diagnostic code, prior visits) on the dashboard.
+2. Request Transit: The dashboard sends a POST request to "/api/predict" which 
+   Vite proxies directly to the backend Python FastAPI server.
+3. Feature Processing: The backend API maps the diagnostic code to clinical groupings 
+   and ordinally maps age brackets, aligning them with the model's 116 expected columns.
+4. Model Inference: The XGBoost classifier calculates the raw readmission probability.
+5. Risk Classification: The score is compared against the optimized threshold (52.7%). 
+   If it exceeds it, the patient is flagged as a high/critical risk.
+6. SHAP Calculations: The SHAP TreeExplainer calculates attributions for each feature.
+7. Text Synthesis: The backend processes SHAP impacts to form a human-readable summary 
+   (e.g., explaining that the risk is driven by diag_1 and mitigated by prior visits).
+8. Rendering: The client UI renders the risk meter, the text summary card, and 
+   the interactive attribution graphs.
+================================================================================
