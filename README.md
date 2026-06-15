@@ -4,8 +4,7 @@ An advanced, production-grade clinical decision support system designed to predi
 
 ## 🔗 Live Application Link
 
-🚀 **Clinical AI Dashboard:** [Launch Full-Stack Application](https://www.google.com/search?q=YOUR_LINK_HERE)
-(Fully containerized with Docker, featuring an integrated React/Tailwind frontend and FastAPI inference engine.)
+https://huggingface.co/spaces/praneeth-dh/Hospital-Readmission-risk-engine
 
 ## 🚀 Architecture
 
