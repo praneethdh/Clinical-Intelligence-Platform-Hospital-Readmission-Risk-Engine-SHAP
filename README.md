@@ -6,6 +6,10 @@ An advanced, production-grade clinical decision support system designed to predi
 
 https://huggingface.co/spaces/praneeth-dh/Hospital-Readmission-risk-engine
 
+## Screenshots
+<img width="1919" height="979" alt="Screenshot 2026-06-15 123508" src="https://github.com/user-attachments/assets/88894b65-9a24-4ca9-9cd4-9d570f108dcb" />
+<img width="1919" height="976" alt="Screenshot 2026-06-15 123514" src="https://github.com/user-attachments/assets/1f350fa5-ffc8-40c6-bdef-215ed51285d8" />
+
 ## 🚀 Architecture
 
 This system is architected for high-performance clinical environments:
@@ -70,14 +74,15 @@ The dashboard will be available at `http://localhost:5173`.
 ├── datasets/             # Cleaned clinical records (anonymized)
 ├── main.py               # API Entry point
 └── requirements.txt      # Production environment dependencies
-
+```
 ---
-
-## 📄 License
-Distributed under the MIT License.
 
 ## 📈 System Objectives
 
 * **Clinical Quality:** Reduce 30-day hospital readmission rates through early, data-driven intervention.
 * **Transparency:** Eliminate "black-box" predictions by providing doctors with SHAP-based diagnostic attributions.
 * **Operational Efficiency:** Automate clinical risk assessment to save staff time and focus resources on critical patients.
+
+## 📄 License
+Distributed under the MIT License.
+
