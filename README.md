@@ -71,7 +71,10 @@ The dashboard will be available at `http://localhost:5173`.
 ├── main.py               # API Entry point
 └── requirements.txt      # Production environment dependencies
 
-```
+---
+
+## 📄 License
+Distributed under the MIT License.
 
 ## 📈 System Objectives
 
